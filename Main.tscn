@@ -1,0 +1,209 @@
+[gd_scene format=3 uid="uid://cor4r8nrcysh4"]
+
+[ext_resource type="Theme" path="res://themes/light_theme.res" id="1_3dxm6"]
+[ext_resource type="Script" uid="uid://b55lyvyvsapfs" path="res://scripts/main.gd" id="1_cm0pq"]
+[ext_resource type="Script" uid="uid://baf07k48vuk0m" path="res://scripts/file_menu.gd" id="1_uu6xs"]
+[ext_resource type="Script" uid="uid://civja7mbnl8ab" path="res://scripts/edit_menu.gd" id="2_cm0pq"]
+[ext_resource type="PackedScene" uid="uid://cim8iqf7v2q34" path="res://gote_edit/GoteEdit.tscn" id="2_r0du0"]
+[ext_resource type="Script" uid="uid://dyr44i627781l" path="res://scripts/view_menu.gd" id="4_fos0i"]
+[ext_resource type="Script" uid="uid://c80nacco4dvi1" path="res://scripts/help_menu.gd" id="6_03owx"]
+[ext_resource type="Script" uid="uid://byu88ih3rh2b6" path="res://scripts/theme_button.gd" id="6_lgr22"]
+[ext_resource type="Script" uid="uid://026s6tj0rk1p" path="res://scripts/version_label.gd" id="8_trn2v"]
+[ext_resource type="Texture2D" uid="uid://byx1ajks6ipnl" path="res://GotePad_icon.svg" id="10_wkp8b"]
+
+[node name="Control" type="Control" unique_id=1609736225]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_3dxm6")
+script = ExtResource("1_cm0pq")
+
+[node name="BackgroundPanel" type="Panel" parent="." unique_id=1108544809]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=141089470]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=2039026186]
+layout_mode = 2
+
+[node name="MenuBar" type="MenuBar" parent="VBoxContainer/HBoxContainer" unique_id=714816572]
+layout_mode = 2
+
+[node name="FileMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar" unique_id=2016093983]
+oversampling_override = 1.0
+title = "文件"
+size = Vector2i(100, 116)
+item_count = 4
+item_0/text = "新建"
+item_0/id = 0
+item_1/text = "打开"
+item_1/id = 1
+item_2/text = "保存"
+item_2/id = 2
+item_3/text = "保存为"
+item_3/id = 3
+script = ExtResource("1_uu6xs")
+
+[node name="EditMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar" unique_id=701982768]
+oversampling_override = 1.0
+title = "编辑"
+size = Vector2i(100, 305)
+item_count = 11
+item_0/text = "撤销"
+item_0/id = 0
+item_1/text = "重做"
+item_1/id = 1
+item_2/id = 2
+item_2/separator = true
+item_3/text = "剪切"
+item_3/id = 3
+item_4/text = "复制"
+item_4/id = 4
+item_5/text = "粘贴"
+item_5/id = 5
+item_6/id = 6
+item_6/separator = true
+item_7/text = "全选"
+item_7/id = 7
+item_8/id = 8
+item_8/separator = true
+item_9/text = "查找"
+item_9/id = 9
+item_10/text = "替换"
+item_10/id = 10
+script = ExtResource("2_cm0pq")
+
+[node name="ViewMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar" unique_id=1902067041]
+oversampling_override = 1.0
+title = "查看"
+item_count = 5
+item_0/text = "放大"
+item_0/id = 0
+item_1/text = "缩小"
+item_1/id = 1
+item_2/text = "默认缩放"
+item_2/id = 2
+item_3/id = 3
+item_3/separator = true
+item_4/text = "自动换行"
+item_4/checkable = 1
+item_4/checked = true
+item_4/id = 4
+script = ExtResource("4_fos0i")
+
+[node name="HelpMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar" unique_id=1550987884]
+title = "关于"
+item_count = 1
+item_0/text = "关于"
+item_0/id = 0
+script = ExtResource("6_03owx")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HBoxContainer" unique_id=227709907]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="CheckButton" type="CheckButton" parent="VBoxContainer/HBoxContainer/HBoxContainer" unique_id=1157330400]
+layout_mode = 2
+button_pressed = true
+text = "🌓"
+script = ExtResource("6_lgr22")
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=721390456]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+tabs_visible = false
+
+[node name="GoteEdit" parent="VBoxContainer/TabContainer" unique_id=1561972519 instance=ExtResource("2_r0du0")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+metadata/_tab_index = 0
+
+[node name="AboutWindow" type="Window" parent="." unique_id=2034024244]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "关于"
+initial_position = 2
+size = Vector2i(600, 300)
+visible = false
+
+[node name="AboutPanel" type="Panel" parent="AboutWindow" unique_id=1665141709]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="AboutWindow" unique_id=359946109]
+offset_left = 30.0
+offset_top = 103.0
+offset_right = 232.0
+offset_bottom = 182.0
+theme_override_font_sizes/font_size = 48
+text = "GotePad"
+
+[node name="Label2" type="Label" parent="AboutWindow" unique_id=1416259246]
+offset_left = 30.0
+offset_top = 185.0
+offset_right = 299.0
+offset_bottom = 290.0
+theme_override_font_sizes/font_size = 32
+text = "by 摄思工作室
+made with Godot"
+
+[node name="VersionLabel" type="Label" parent="AboutWindow" unique_id=1862026880]
+offset_left = 242.0
+offset_top = 120.0
+offset_right = 338.0
+offset_bottom = 175.0
+theme_override_font_sizes/font_size = 32
+text = "v1.0.0"
+script = ExtResource("8_trn2v")
+
+[node name="Sprite2D" type="Sprite2D" parent="AboutWindow" unique_id=304258626]
+position = Vector2(200, 52)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("10_wkp8b")
+
+[node name="TextEdit" type="TextEdit" parent="AboutWindow" unique_id=1638492392]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -252.0
+offset_top = 39.0
+offset_right = -35.0
+offset_bottom = 289.0
+grow_horizontal = 0
+text = "Godot Engine
+    from https://godotengine.org/
+    under the MIT license
+Noto Sans
+    from https://fonts.google.com/noto
+    under the OFL license"
+editable = false
+
+[node name="Label3" type="Label" parent="AboutWindow" unique_id=1729017214]
+offset_left = 343.0
+offset_top = 5.0
+offset_right = 459.0
+offset_bottom = 40.0
+theme_override_font_sizes/font_size = 18
+text = "第三方资源："
+
+[connection signal="close_requested" from="AboutWindow" to="AboutWindow" method="hide"]
