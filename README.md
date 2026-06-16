@@ -20,6 +20,14 @@ This project serves as an example of using GoteEdit.
 
 <img title="" src="media/3.png">
 
+## 项目链接 Links
+
+[GoteEdit - Godot Asset Store](https://store.godotengine.org/asset/brothershort-shesi-studio/goteedit/)
+
+[GoteEdit - GitHub](https://github.com/BrotherShort/GoteEdit)
+
+[GotePad - GitHub](https://github.com/BrotherShort/GotePad) （范例项目）(Example project)
+
 ## 授权协议 License
 
 本项目以 MIT 协议发布。
