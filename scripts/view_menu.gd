@@ -1,6 +1,6 @@
 extends PopupMenu
 
-@onready var _gote_edit: GoteEdit = $"%GoteEdit"
+@onready var _gote_edit: GoteEdit = $%GoteEdit
 
 func _ready():
 	id_pressed.connect(_id_pressed)
@@ -20,11 +20,18 @@ func _id_pressed(id: int) -> void:
 			is_checked = not is_checked
 			set_item_checked(id, is_checked)
 			if is_checked:
-				_gote_edit.text_edit.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_BOUNDARY
+				_gote_edit.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_BOUNDARY
 			else:
-				_gote_edit.text_edit.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_NONE
+				_gote_edit.wrap_mode = TextEdit.LineWrappingMode.LINE_WRAPPING_NONE
+		5: # 显示行号 Show line numbers
+			var is_checked: bool = is_item_checked(id)
+			is_checked = not is_checked
+			set_item_checked(id, is_checked)
+			_gote_edit.draw_line_numbers = is_checked
+		
 
-
+## 设置菜单快捷键
+## Set menu shortcuts
 func set_menu_shortcuts() -> void:
 	set_item_shortcut(0, MenuHelper.get_shortcut(KEY_EQUAL)) # 放大 Zoom in
 	set_item_shortcut(1, MenuHelper.get_shortcut(KEY_MINUS)) # 缩小 Zoom out

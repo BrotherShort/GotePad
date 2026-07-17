@@ -1,17 +1,16 @@
 class_name FindReplaceBar
-extends HBoxContainer
+extends Control
 
 # 不使用 @onready，因为外部调用方可能会在对象 ready 阶段之前调用
 # No @onready, because external callers may call before the object is ready
-var _main_text_edit: TextEdit:
-	get: return %MainTextEdit
+var _gote_edit: GoteEdit:
+	get: return owner
 var _search_text_edit: LineEdit:
 	get: return %SearchText
 var _replace_text_edit: LineEdit:
 	get: return %ReplaceText
 var _case_sensitive: CheckBox:
 	get: return %CaseSensitive
-
 
 func _on_search_text_edit_text_changed(search_text: String) -> void:
 	set_highlight_search_text(search_text)
@@ -44,9 +43,10 @@ func _on_replace_all_pressed() -> void:
 			match_pos.y == first_match_pos.y and match_pos.x <= first_match_pos.x:
 			break
 		replace_current()
-		
+
 
 func _on_hide_button_pressed() -> void:
+	_gote_edit.set_search_text("")
 	hide()
 
 
@@ -88,10 +88,10 @@ func get_replace_text() -> String:
 func search(is_prev: bool = false) -> bool:
 	var flags: int = get_search_flags(is_prev)
 	var caret_col_line: Vector2i = get_caret_col_line()
-	var pos: Vector2i = _main_text_edit.search(get_search_text(), flags, caret_col_line.y, caret_col_line.x)
+	var pos: Vector2i = _gote_edit.search(get_search_text(), flags, caret_col_line.y, caret_col_line.x)
 	if (pos.x >= 0):
 		set_caret_col_line(pos)
-		_main_text_edit.select(pos.y, pos.x, pos.y, pos.x + get_search_text().length())
+		_gote_edit.select(pos.y, pos.x, pos.y, pos.x + get_search_text().length())
 		return true
 	else:
 		return false
@@ -101,17 +101,17 @@ func search(is_prev: bool = false) -> bool:
 ## Highlight the search text in the text
 func set_highlight_search_text(search_text: String) -> void:
 	var flags: int = get_search_flags()
-	_main_text_edit.set_search_flags(flags)
-	_main_text_edit.set_search_text(search_text)
-	_main_text_edit.queue_redraw()
+	_gote_edit.set_search_flags(flags)
+	_gote_edit.set_search_text(search_text)
+	_gote_edit.queue_redraw()
 
 
 ## 替换当前选中的文本
 ## Replace the currently selected text
 func replace_current() -> void:
-	_main_text_edit.delete_selection()
+	_gote_edit.delete_selection()
 	var caret_col_line: Vector2i = get_caret_col_line()
-	_main_text_edit.insert_text(get_replace_text(), caret_col_line.y, caret_col_line.x)
+	_gote_edit.insert_text(get_replace_text(), caret_col_line.y, caret_col_line.x)
 
 
 ## 获取搜索标志
@@ -128,11 +128,11 @@ func get_search_flags(is_prev: bool = false) -> int:
 ## 获取光标所在位置
 ## Get the caret column and line
 func get_caret_col_line() -> Vector2i:
-	return Vector2i(_main_text_edit.get_caret_column(), _main_text_edit.get_caret_line())
+	return Vector2i(_gote_edit.get_caret_column(), _gote_edit.get_caret_line())
 
 
 ## 设置光标所在位置
 ## Set the caret column and line
 func set_caret_col_line(col_line: Vector2i) -> void:
-	_main_text_edit.set_caret_line(col_line.y)
-	_main_text_edit.set_caret_column(col_line.x)
+	_gote_edit.set_caret_line(col_line.y)
+	_gote_edit.set_caret_column(col_line.x)

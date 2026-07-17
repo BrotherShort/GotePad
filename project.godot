@@ -15,9 +15,9 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="GotePad"
-config/version="0.1.0"
-run/main_scene="res://Main.tscn"
-config/features=PackedStringArray("4.6", "Forward Plus")
+config/version="0.2.0"
+run/main_scene="res://main2.tscn"
+config/features=PackedStringArray("4.7", "Forward Plus")
 run/low_processor_mode=true
 boot_splash/show_image=false
 config/icon="uid://byx1ajks6ipnl"

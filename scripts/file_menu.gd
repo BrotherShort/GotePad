@@ -1,6 +1,6 @@
 extends PopupMenu
 
-@onready var _gote_edit: GoteEdit = $"%GoteEdit"
+@onready var _gote_edit: GoteEdit = $%GoteEdit
 
 func _ready():
 	id_pressed.connect(_id_pressed)
@@ -19,6 +19,8 @@ func _id_pressed(id: int) -> void:
 			_gote_edit.save_file_as()
 
 
+## 设置菜单快捷键
+## Set menu shortcuts
 func set_menu_shortcuts() -> void:
 	set_item_shortcut(0, MenuHelper.get_shortcut(KEY_N)) # 新建
 	set_item_shortcut(1, MenuHelper.get_shortcut(KEY_O)) # 打开

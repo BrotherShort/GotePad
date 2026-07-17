@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cvnaasibhu86g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_50vjb"]
+
+[node name="LineNumberLabel" type="Label" unique_id=1059352376]
+offset_right = 10.0
+offset_bottom = 24.0
+theme_override_constants/line_spacing = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_50vjb")
+text = "0"
+horizontal_alignment = 2
