@@ -28,8 +28,6 @@ script = ExtResource("1_4fmuq")
 unique_name_in_owner = true
 visible = false
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 script = ExtResource("2_r35ub")
 
 [node name="FindReplaceBar" type="Control" parent="." unique_id=1107880065]
@@ -122,11 +120,12 @@ icon = ExtResource("5_sucp8")
 [node name="BarThemeManager" type="Control" parent="." unique_id=189286446]
 visible = false
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
 script = ExtResource("7_awum1")
 
-[node name="OpenFileDialog" type="FileDialog" parent="." unique_id=1948221797]
+[node name="Dialogs" type="Control" parent="." unique_id=1739904003]
+anchors_preset = 0
+
+[node name="OpenFileDialog" type="FileDialog" parent="Dialogs" unique_id=1948221797]
 unique_name_in_owner = true
 auto_translate_mode = 1
 oversampling_override = 1.0
@@ -136,27 +135,27 @@ ok_button_text = "Open"
 file_mode = 0
 access = 2
 
-[node name="SaveFileDialog" type="FileDialog" parent="." unique_id=1955448189]
+[node name="SaveFileDialog" type="FileDialog" parent="Dialogs" unique_id=1955448189]
 unique_name_in_owner = true
 oversampling_override = 1.0
 access = 2
 
-[node name="ClosePromptDialog" type="Window" parent="." unique_id=797708642]
+[node name="UnsavedDialog" type="Window" parent="Dialogs" unique_id=797708642]
 unique_name_in_owner = true
 oversampling_override = 1.0
-title = "关闭提示"
+title = "未保存提示"
 position = Vector2i(0, 36)
 size = Vector2i(360, 120)
 visible = false
 
-[node name="Background" type="TabContainer" parent="ClosePromptDialog" unique_id=1832505024]
+[node name="Background" type="TabContainer" parent="Dialogs/UnsavedDialog" unique_id=1832505024]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="ClosePromptDialog" unique_id=1721331448]
+[node name="Label" type="Label" parent="Dialogs/UnsavedDialog" unique_id=1721331448]
 offset_left = 30.0
 offset_top = 10.0
 offset_right = 222.0
@@ -164,27 +163,28 @@ offset_bottom = 61.0
 text = "文档存在未保存的修改，
 是否要保存对文档的修改？"
 
-[node name="ButtonSaveClose" type="Button" parent="ClosePromptDialog" unique_id=266442673]
+[node name="UnsavedDialogButtonSave" type="Button" parent="Dialogs/UnsavedDialog" unique_id=266442673]
 offset_left = 30.0
 offset_top = 75.0
 offset_right = 110.0
 offset_bottom = 107.0
 text = "保存"
 
-[node name="ButtonDoNotSaveClose" type="Button" parent="ClosePromptDialog" unique_id=451575733]
+[node name="UnsavedDialogButtonDoNotSave" type="Button" parent="Dialogs/UnsavedDialog" unique_id=451575733]
 offset_left = 140.0
 offset_top = 75.0
 offset_right = 220.0
 offset_bottom = 107.0
 text = "不保存"
 
-[node name="ButtonCancel" type="Button" parent="ClosePromptDialog" unique_id=755109772]
+[node name="UnsavedDialogButtonCancel" type="Button" parent="Dialogs/UnsavedDialog" unique_id=755109772]
 offset_left = 250.0
 offset_top = 75.0
 offset_right = 330.0
 offset_bottom = 107.0
 text = "取消"
 
+[connection signal="lines_edited_from" from="." to="." method="_on_lines_edited_from"]
 [connection signal="text_changed" from="." to="." method="_on_text_changed"]
 [connection signal="hidden" from="LineNumbers" to="LineNumbers" method="remove_gutter"]
 [connection signal="text_changed" from="FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/LineEditContainer/SearchText" to="FindReplaceBar" method="_on_search_text_edit_text_changed"]
@@ -193,9 +193,9 @@ text = "取消"
 [connection signal="pressed" from="FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ButtonContainer/ReplaceButtonContainer/Replace" to="FindReplaceBar" method="_on_replace_pressed"]
 [connection signal="pressed" from="FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ButtonContainer/ReplaceButtonContainer/ReplaceAll" to="FindReplaceBar" method="_on_replace_all_pressed"]
 [connection signal="pressed" from="FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/HideButton" to="FindReplaceBar" method="_on_hide_button_pressed"]
-[connection signal="file_selected" from="OpenFileDialog" to="." method="_on_open_file_dialog_file_selected"]
-[connection signal="file_selected" from="SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]
-[connection signal="close_requested" from="ClosePromptDialog" to="ClosePromptDialog" method="hide"]
-[connection signal="pressed" from="ClosePromptDialog/ButtonSaveClose" to="." method="_on_button_save_close_pressed"]
-[connection signal="pressed" from="ClosePromptDialog/ButtonDoNotSaveClose" to="." method="_on_button_do_not_save_close_pressed"]
-[connection signal="pressed" from="ClosePromptDialog/ButtonCancel" to="ClosePromptDialog" method="hide"]
+[connection signal="file_selected" from="Dialogs/OpenFileDialog" to="." method="_on_open_file_dialog_file_selected"]
+[connection signal="file_selected" from="Dialogs/SaveFileDialog" to="." method="_on_save_file_dialog_file_selected"]
+[connection signal="close_requested" from="Dialogs/UnsavedDialog" to="Dialogs/UnsavedDialog" method="hide"]
+[connection signal="pressed" from="Dialogs/UnsavedDialog/UnsavedDialogButtonSave" to="." method="_on_unsaved_dialog_button_save_pressed"]
+[connection signal="pressed" from="Dialogs/UnsavedDialog/UnsavedDialogButtonDoNotSave" to="." method="_on_unsaved_dialog_button_do_not_save_pressed"]
+[connection signal="pressed" from="Dialogs/UnsavedDialog/UnsavedDialogButtonCancel" to="Dialogs/UnsavedDialog" method="hide"]

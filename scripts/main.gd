@@ -13,6 +13,7 @@ var _last_title: String = ""
 func _ready():
 	_name = ProjectSettings.get_setting("application/config/name") as String
 	_gote_edit.use_native_dialog = true
+	_gote_edit.file_filters = ["*.txt"]
 	get_tree().set_auto_accept_quit(false)
 
 
@@ -26,4 +27,4 @@ func _process(_delta: float):
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
-			_gote_edit.close_check()
+			_gote_edit.unsaved_check(func(): get_tree().quit())

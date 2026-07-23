@@ -9,11 +9,7 @@ var _gote_edit: GoteEdit:
 
 ## 行号数字 label 场景资源
 ## Line number label scene resource
-var _number_label: Resource
-
-func _ready() -> void:
-	_number_label = load(owner.addon_path + "/scenes/line_number_label.tscn")
-
+@onready var _number_label: Resource = load(owner.addon_path + "/scenes/line_number_label.tscn")
 
 func _process(_delta: float) -> void:
 	if visible:
@@ -26,13 +22,12 @@ func _process(_delta: float) -> void:
 		var first_line: int = _gote_edit.get_first_visible_line()
 		var last_line: int = _gote_edit.get_last_full_visible_line() + 1
 
-		var offset: Vector2 = _gote_edit.get_theme_stylebox("normal").get_offset()
-		var gutter_pos: int = get_gutter_pos()
+		var gutter_pos: Vector2 = _gote_edit.get_gutter_ract_by_name(LINE_NUMBER_GUTTER_NAME).position
 		var max_num_width: float = _get_number_width(font, font_size, _gote_edit.get_line_count())
 		var margin: float = font_size / 2.0
 		var gutter_width: int = ceili(max_num_width + margin * 2)
 
-		var gutter_index: int = get_gutter()
+		var gutter_index: int = _get_gutter()
 		_gote_edit.set_gutter_width(gutter_index, gutter_width)
 
 		_reset_group()
@@ -56,46 +51,25 @@ func _process(_delta: float) -> void:
 			var num_size = font.get_string_size(num_text, HORIZONTAL_ALIGNMENT_RIGHT, -1, font_size)
 			num_label.size.x = max_num_width
 			num_label.size.y = num_size.y
-			num_label.position.x = offset.x + gutter_pos + margin
-			num_label.position.y = \
-				offset.y + \
-				(visual_line - _gote_edit.scroll_vertical) * _gote_edit.get_line_height() + \
-				(_gote_edit.get_line_height() - num_size.y) / 2
+			num_label.position.x = gutter_pos.x + margin
+			num_label.position.y = gutter_pos.y + \
+				(visual_line - _gote_edit.scroll_vertical + 0.5) * _gote_edit.get_line_height() \
+				- num_size.y / 2
 
 
 func _on_hidden() -> void:
-	remove_gutter()
+	_gote_edit.remove_gutter_by_name(LINE_NUMBER_GUTTER_NAME)
 
 
 ## 获取行号栏
 ## Get line number gutter
-func get_gutter() -> int:
-	for i in range(_gote_edit.get_gutter_count()):
-		if _gote_edit.get_gutter_name(i) == LINE_NUMBER_GUTTER_NAME:
-			return i
-
-	_gote_edit.add_gutter(-1);
-	var gutter_index: int = _gote_edit.get_gutter_count() - 1
-	_gote_edit.set_gutter_name(gutter_index, LINE_NUMBER_GUTTER_NAME);
+func _get_gutter() -> int:
+	var gutter_index: int = _gote_edit.get_gutter_by_name(LINE_NUMBER_GUTTER_NAME)
+	if gutter_index == -1:
+		_gote_edit.add_gutter(-1);
+		gutter_index = _gote_edit.get_gutter_count() - 1
+		_gote_edit.set_gutter_name(gutter_index, LINE_NUMBER_GUTTER_NAME);
 	return gutter_index
-
-
-## 获取行号栏横向位置
-## Get line number gutter position x
-func get_gutter_pos() -> int:
-	var gutter_index: int = get_gutter()
-	var total_width: int = 0
-	for i in range(gutter_index):
-		total_width += _gote_edit.get_gutter_width(i)
-	return total_width
-
-
-## 移除行号栏
-## Remove line number gutter
-func remove_gutter() -> void:
-	for i in range(_gote_edit.get_gutter_count()):
-		if _gote_edit.get_gutter_name(i) == LINE_NUMBER_GUTTER_NAME:
-			_gote_edit.remove_gutter(i)
 
 
 ## 重置行号 label

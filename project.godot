@@ -22,6 +22,10 @@ run/low_processor_mode=true
 boot_splash/show_image=false
 config/icon="uid://byx1ajks6ipnl"
 
+[display]
+
+window/stretch/aspect="expand"
+
 [dotnet]
 
 project/assembly_name="GotePad"
