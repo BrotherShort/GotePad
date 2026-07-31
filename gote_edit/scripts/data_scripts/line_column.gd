@@ -3,6 +3,7 @@ class_name LineColumn
 var line: int
 var column: int
 
+@warning_ignore("shadowed_variable")
 func _init(line: int, column: int) -> void:
 	self.line = line
 	self.column = column

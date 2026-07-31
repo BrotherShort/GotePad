@@ -50,6 +50,12 @@ func _on_text_changed():
 	_lines_before = lines_after
 
 
+func _on_text_set() -> void:
+	_lines_before = []
+	for i in range(get_line_count()):
+		_lines_before.append(get_line(i))
+
+
 func _on_lines_edited_from(_from_line: int, _to_line: int) -> void:
 	_caret_line_column_before = LineColumn.new(get_caret_line(), get_caret_column())
 
@@ -287,6 +293,37 @@ func get_line_length(line: int) -> int:
 	return get_line(line).length()
 
 
+## 获取文本行位于换行索引的第一个字符的列号
+## Get first character column at the wrap index in the text line.
+func get_line_wrap_index_first_column(line: int, wrap_index: int) -> int:
+	if line < 0 || line >= get_line_count():
+		return -1
+
+	if wrap_index < 0 || wrap_index > get_line_wrap_count(line):
+		return -1
+
+	var line_length: int = get_line(line).length()
+	
+	# 二分查找首个匹配项
+	# Binary search first
+	var start_col: int = 0
+	var end_col: int = line_length
+	var result: int = -1
+
+	while start_col <= end_col:
+		var mid_col: int = (start_col + end_col) / 2
+
+		if get_line_wrap_index_at_column(line, mid_col) == wrap_index:
+			result = mid_col
+			end_col = mid_col - 1
+		elif get_line_wrap_index_at_column(line, mid_col) < wrap_index:
+			start_col = mid_col + 1
+		else:
+			end_col = mid_col - 1
+
+	return result
+
+
 ## 获取文本行位于换行索引的文本的长度
 ## Get the text length at the wrap index of a text line
 func get_line_wrap_index_length(line: int, wrap_index: int) -> int:
@@ -298,21 +335,23 @@ func get_line_wrap_index_length(line: int, wrap_index: int) -> int:
 
 	var line_length: int = get_line(line).length()
   
-	var start_col: int = 0
-	for col in range(0, line_length):
-		var col_wrap_index: int = get_line_wrap_index_at_column(line, col)
-		if col_wrap_index == wrap_index:
-			start_col = col
-			break
+	var first_col: int = get_line_wrap_index_first_column(line, wrap_index)
+	if first_col == -1:
+		return 0
 
-	var end_col: int = line_length
-	for col in range(start_col + 1, line_length):
-		var col_wrap_index: int = get_line_wrap_index_at_column(line, col)
-		if col_wrap_index == wrap_index + 1:
-			end_col = col
-			break
+	var next_first_col: int = -1
+	if wrap_index == get_line_wrap_count(line):
+		next_first_col = line_length
+	else:
+		for col in range(first_col + 1, line_length):
+			var col_wrap_index: int = get_line_wrap_index_at_column(line, col)
+			if col_wrap_index > wrap_index:
+				next_first_col = col
+				break
+	if next_first_col == -1:
+		next_first_col = line_length
 
-	return end_col - start_col
+	return next_first_col - first_col
 
 
 ## 文本行号转显示行号
@@ -379,18 +418,26 @@ func line_column_to_visual_line_column(line_column: LineColumn) -> LineColumn:
 	if line_column.column < 0 || line_column.column > line_length:
 		return LineColumn.new(-1, -1)
 
+	var wrap_index: int = get_line_wrap_index_at_column(line_column.line, line_column.column)
+
 	var visual_line: int
 	if line_column.line > 0:
 		visual_line = get_visible_line_count_in_range(0, line_column.line - 1)
 	else:
 		visual_line = 0
-	visual_line += get_line_wrap_index_at_column(line_column.line, line_column.column)
+	visual_line += wrap_index
 
-	var line_wrap_index: LineWrapIndex = visual_line_to_line(visual_line)
-	var up_visual_line_length: int = 0
-	for i in range(0, line_wrap_index.wrap_index):
-		up_visual_line_length += get_line_wrap_index_length(line_wrap_index.line, i)
-	var visual_col: int = line_column.column - up_visual_line_length
+	var visual_col: int = -1
+	if wrap_index == 0:
+		visual_col = line_column.column
+	else:
+		for c in range(line_column.column - 1, -1, -1):
+			var c_wrap_index: int = get_line_wrap_index_at_column(line_column.line, c)
+			if c_wrap_index < wrap_index:
+				visual_col = line_column.column - c - 1
+				break
+	if visual_col == -1:
+		visual_col = line_column.column
 
 	return LineColumn.new(visual_line, visual_col)
 
@@ -407,17 +454,15 @@ func visual_line_column_to_line_column(visual_line_column: LineColumn) -> LineCo
 
 	var line_wrap_index: LineWrapIndex = visual_line_to_line(visual_line_column.line)
 
-	var char_count: int = 0
-	for i in range(line_wrap_index.wrap_index):
-		char_count += get_line_wrap_index_length(line_wrap_index.line, i)
-	char_count += visual_line_column.column
+	var first_col: int = get_line_wrap_index_first_column(line_wrap_index.line, line_wrap_index.wrap_index)
 
-	return LineColumn.new(line_wrap_index.line, char_count)
+	var col: int = first_col + visual_line_column.column
+	return LineColumn.new(line_wrap_index.line, col)
 
 
 ## 查找文本编辑位置
 ## Find the start and end positions of edited text
-static func find_diff_range(lines_before: PackedStringArray, lines_after: PackedStringArray, \
+func find_diff_range(lines_before: PackedStringArray, lines_after: PackedStringArray, \
 	from_line_column: LineColumn, to_line_column: LineColumn) -> Vector4i:
 	if from_line_column.less_than(to_line_column):
 		# 后移一定是插入
@@ -445,7 +490,7 @@ static func find_diff_range(lines_before: PackedStringArray, lines_after: Packed
 			var line_tail_count = lines_after[to_line_column.line].length() - to_line_column.column
 			var from_column = lines_before[from_line_column.line].length() - line_tail_count
 			return Vector4i(from_line, from_column, to_line_column.line, to_line_column.column)
-		
+
 
 #endregion
 

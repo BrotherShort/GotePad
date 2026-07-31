@@ -33,6 +33,7 @@ script = ExtResource("2_r35ub")
 [node name="FindReplaceBar" type="Control" parent="." unique_id=1107880065]
 unique_name_in_owner = true
 visible = false
+z_index = 10
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -186,6 +187,7 @@ text = "取消"
 
 [connection signal="lines_edited_from" from="." to="." method="_on_lines_edited_from"]
 [connection signal="text_changed" from="." to="." method="_on_text_changed"]
+[connection signal="text_set" from="." to="." method="_on_text_set"]
 [connection signal="hidden" from="LineNumbers" to="LineNumbers" method="remove_gutter"]
 [connection signal="text_changed" from="FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/LineEditContainer/SearchText" to="FindReplaceBar" method="_on_search_text_edit_text_changed"]
 [connection signal="pressed" from="FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ButtonContainer/SearchButtonContainer/FindPrev" to="FindReplaceBar" method="_on_find_prev_pressed"]

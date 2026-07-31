@@ -3,6 +3,7 @@ class_name LineWrapIndex
 var line: int
 var wrap_index: int
 
+@warning_ignore("shadowed_variable")
 func _init(line: int, wrap_index: int) -> void:
 	self.line = line
 	self.wrap_index = wrap_index
