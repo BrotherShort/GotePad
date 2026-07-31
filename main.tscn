@@ -46,17 +46,22 @@ layout_mode = 2
 [node name="FileMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar" unique_id=2016093983]
 oversampling_override = 1.0
 title = "文件"
-size = Vector2i(100, 116)
-item_count = 4
+size = Vector2i(100, 144)
+item_count = 5
 item_0/text = "新建"
 item_0/id = 0
 item_1/text = "打开"
 item_1/id = 1
-item_2/text = "保存"
+item_2/text = "最近的文件"
 item_2/id = 2
-item_3/text = "保存为"
+item_3/text = "保存"
 item_3/id = 3
+item_4/text = "保存为"
+item_4/id = 4
 script = ExtResource("3_bbj40")
+
+[node name="RecentFilesMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar/FileMenu" unique_id=1076543210]
+oversampling_override = 1.0
 
 [node name="EditMenu" type="PopupMenu" parent="VBoxContainer/HBoxContainer/MenuBar" unique_id=701982768]
 oversampling_override = 1.0

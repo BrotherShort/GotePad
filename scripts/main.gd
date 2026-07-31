@@ -19,8 +19,8 @@ var _current_language: String = "zh_CN"
 @onready var _about_window: Window = $AboutWindow
 @onready var _about_label: Label = $AboutWindow/Label2
 @onready var _about_credits: Label = $AboutWindow/Label3
-@onready var _search_text_edit: LineEdit = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/SearchText
-@onready var _replace_text_edit: LineEdit = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ReplaceText
+#@onready var _search_text_edit: LineEdit = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/SearchText
+#@onready var _replace_text_edit: LineEdit = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ReplaceText
 @onready var _case_sensitive: CheckBox = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ButtonContainer/SearchButtonContainer/CaseSensitive
 @onready var _replace_button: Button = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ButtonContainer/ReplaceButtonContainer/Replace
 @onready var _replace_all_button: Button = $VBoxContainer/TabContainer/GoteEdit/FindReplaceBar/BgContainer1/BgContainer2/HBoxContainer/ButtonContainer/ReplaceButtonContainer/ReplaceAll
@@ -43,6 +43,7 @@ const TRANSLATIONS: Dictionary = {
 		"file_open": "打开",
 		"file_save": "保存",
 		"file_save_as": "保存为",
+		"file_recent": "最近的文件",
 		"edit_undo": "撤销",
 		"edit_redo": "重做",
 		"edit_cut": "剪切",
@@ -87,6 +88,7 @@ const TRANSLATIONS: Dictionary = {
 		"file_open": "Open",
 		"file_save": "Save",
 		"file_save_as": "Save As",
+		"file_recent": "Recent Files",
 		"edit_undo": "Undo",
 		"edit_redo": "Redo",
 		"edit_cut": "Cut",
@@ -168,8 +170,9 @@ func _apply_language() -> void:
 	_file_menu.title = _translate("menu_file")
 	_file_menu.set_item_text(0, _translate("file_new"))
 	_file_menu.set_item_text(1, _translate("file_open"))
-	_file_menu.set_item_text(2, _translate("file_save"))
-	_file_menu.set_item_text(3, _translate("file_save_as"))
+	_file_menu.set_item_text(2, _translate("file_recent"))
+	_file_menu.set_item_text(3, _translate("file_save"))
+	_file_menu.set_item_text(4, _translate("file_save_as"))
 
 	_edit_menu.title = _translate("menu_edit")
 	_edit_menu.set_item_text(0, _translate("edit_undo"))

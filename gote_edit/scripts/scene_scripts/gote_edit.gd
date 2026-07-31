@@ -4,6 +4,8 @@ extends TextEdit
 ## 文本改变时发出，传递编辑前后位置
 ## Emitted when the text changes; passes the positions before and after editing
 signal lines_column_edited_from(_from_line: int, _from_column: int, _to_line: int, _to_column: int)
+signal file_path_opened(path: String)
+signal file_path_saved(path: String)
 
 ## 插件的根目录
 ## The root path of the addon
@@ -66,6 +68,7 @@ func _on_open_file_dialog_file_selected(path: String) -> void:
 		text = file.get_as_text()
 		file_path = path
 		_is_edited = false
+		file_path_opened.emit(path)
 	unsaved_check(callback)
 
 
@@ -77,6 +80,7 @@ func _on_save_file_dialog_file_selected(path: String) -> void:
 	_save_to_file(path)
 	file_path = path
 	_is_edited = false
+	file_path_saved.emit(path)
 
 	if _save_file_dialog_callback.is_valid():
 		_save_file_dialog_callback.call()
@@ -177,6 +181,7 @@ func _save_with_callback(callback: Callable):
 	
 	_save_to_file(file_path)
 	_is_edited = false
+	file_path_saved.emit(file_path)
 
 	if callback.is_valid():
 		callback.call()
